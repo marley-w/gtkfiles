@@ -1,4 +1,3 @@
-// File: HyprFiles.cpp
 #include <gtk/gtk.h>
 #include <iostream>
 #include <string>
@@ -14,6 +13,18 @@ GtkWidget *file_list;
 GtkWidget *path_entry;
 std::stack<std::string> directory_history;
 std::string current_directory;
+std::string selected_file; // To track the file selected by right-click
+
+// Function declarations
+void populate_file_list(const std::string &path);
+void on_back_clicked(GtkButton *button, gpointer user_data);
+void on_home_clicked(GtkButton *button, gpointer user_data);
+void on_root_clicked(GtkButton *button, gpointer user_data);
+void on_path_entry_activate(GtkEntry *entry, gpointer user_data);
+void on_delete_clicked(GtkMenuItem *menu_item, gpointer user_data);
+gboolean on_tree_view_button_press(GtkWidget *widget, GdkEventButton *event, gpointer user_data);
+void show_error_dialog(const std::string &error_message);
+void on_row_activated(GtkTreeView *tree_view, GtkTreePath *path, GtkTreeViewColumn *column, gpointer user_data);
 
 // Function to update the path entry
 void update_path_entry() {
@@ -100,8 +111,66 @@ void on_path_entry_activate(GtkEntry *entry, gpointer user_data) {
         directory_history.push(current_directory);
         populate_file_list(new_path);
     } else {
-        std::cerr << "Invalid directory: " << new_path << std::endl;
+        show_error_dialog("Invalid directory path.");
     }
+}
+
+// Function to display an error dialog
+void show_error_dialog(const std::string &error_message) {
+    GtkWidget *dialog = gtk_message_dialog_new(GTK_WINDOW(window),
+                                               GTK_DIALOG_MODAL,
+                                               GTK_MESSAGE_ERROR,
+                                               GTK_BUTTONS_OK,
+                                               "Error: %s", error_message.c_str());
+    gtk_dialog_run(GTK_DIALOG(dialog));
+    gtk_widget_destroy(dialog);
+}
+
+// Callback for right-click menu -> Delete
+void on_delete_clicked(GtkMenuItem *menu_item, gpointer user_data) {
+    if (selected_file.empty()) {
+        show_error_dialog("No file selected for deletion.");
+        return;
+    }
+
+    try {
+        fs::remove_all(selected_file);
+        std::cout << "Deleted: " << selected_file << std::endl;
+        populate_file_list(current_directory); // Refresh the file list
+    } catch (const fs::filesystem_error &e) {
+        show_error_dialog(std::string("Failed to delete file: ") + e.what());
+    }
+}
+
+// Callback to display right-click menu
+gboolean on_tree_view_button_press(GtkWidget *widget, GdkEventButton *event, gpointer user_data) {
+    if (event->type == GDK_BUTTON_PRESS && event->button == 3) { // Right-click
+        GtkTreeView *tree_view = GTK_TREE_VIEW(widget);
+        GtkTreeModel *model = gtk_tree_view_get_model(tree_view);
+        GtkTreePath *path;
+        GtkTreeIter iter;
+
+        if (gtk_tree_view_get_path_at_pos(tree_view, event->x, event->y, &path, NULL, NULL, NULL)) {
+            gtk_tree_model_get_iter(model, &iter, path);
+            gchar *file_name;
+            gtk_tree_model_get(model, &iter, 1, &file_name, -1);
+
+            selected_file = current_directory + "/" + file_name;
+
+            GtkWidget *menu = gtk_menu_new();
+            GtkWidget *delete_item = gtk_menu_item_new_with_label("Delete");
+            g_signal_connect(delete_item, "activate", G_CALLBACK(on_delete_clicked), NULL);
+            gtk_menu_shell_append(GTK_MENU_SHELL(menu), delete_item);
+
+            gtk_widget_show_all(menu);
+            gtk_menu_popup_at_pointer(GTK_MENU(menu), (GdkEvent *)event);
+
+            g_free(file_name);
+            gtk_tree_path_free(path);
+            return TRUE;
+        }
+    }
+    return FALSE;
 }
 
 // Main function
@@ -156,6 +225,7 @@ int main(int argc, char *argv[]) {
     gtk_tree_view_append_column(GTK_TREE_VIEW(file_list), column);
 
     g_signal_connect(file_list, "row-activated", G_CALLBACK(on_row_activated), NULL);
+    g_signal_connect(file_list, "button-press-event", G_CALLBACK(on_tree_view_button_press), NULL);
 
     GtkWidget *scrolled_window = gtk_scrolled_window_new(NULL, NULL);
     gtk_container_add(GTK_CONTAINER(scrolled_window), file_list);
@@ -173,4 +243,3 @@ int main(int argc, char *argv[]) {
 
     return 0;
 }
-
