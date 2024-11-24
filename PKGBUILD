@@ -1,30 +1,28 @@
-# Maintainer: Your Name <marleymrw@proton.me>
+# Maintainer: Your Name <your.email@example.com>
 pkgname=hyprfiles
-pkgver=1.1.gd55cf4e
+pkgver=1.0.0
 pkgrel=1
-pkgdesc="A minimalist file manager tailored for Hyprland"
+pkgdesc="A file manager for Hyprland"
 arch=('x86_64')
 url="https://github.com/marley-w/hyprfiles"
-license=('MIT') # Adjust this if your project uses a different license
-depends=('gtk3') # Add other dependencies here
-makedepends=('git')
+license=('MIT')
+depends=('gtk3' 'git' 'other-dependencies-if-any')  # Add any other runtime dependencies here
+makedepends=('git')  # Add build dependencies if needed
 source=("git+https://github.com/marley-w/hyprfiles.git")
-sha256sums=('SKIP')
+sha256sums=('SKIP')  # We skip the checksum because the source is from Git
 
 pkgver() {
-    cd "$srcdir/hyprfiles"
-    git describe --tags | sed 's/^v//;s/-/./g'
-}
-
-build() {
-    cd "$srcdir/hyprfiles"
-    # Add build instructions if needed, e.g., compiling code
+    cd "$srcdir/hyprfiles"  # Enter the hyprfiles directory
+    echo "r$(git rev-list --count HEAD).$(git rev-parse --short HEAD)"  # Use commit count and hash
 }
 
 package() {
-    cd "$srcdir/hyprfiles"
-    install -Dm755 "hyprfiles" "$pkgdir/usr/bin/hyprfiles" # Adjust the source file path
+    cd "$srcdir/hyprfiles"  # Go into the hyprfiles directory
+
+    # Install the executable (adjust this if your executable is in a different location)
+    install -Dm755 hyprfiles "$pkgdir/usr/bin/hyprfiles"
+
+    # Install other necessary files
     install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
     install -Dm644 README.md "$pkgdir/usr/share/doc/$pkgname/README.md"
 }
-
