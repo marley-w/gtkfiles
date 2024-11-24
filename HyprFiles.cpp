@@ -3,6 +3,7 @@
 #include <string>
 #include <stack>
 #include <filesystem>
+#include <vector>
 
 namespace fs = std::filesystem;
 
@@ -172,7 +173,7 @@ void on_rename_clicked(GtkMenuItem *menu_item, gpointer user_data) {
     gtk_widget_destroy(dialog);
 }
 
-// Open with apps
+// Open with apps (filtered)
 void on_open_with_clicked(GtkMenuItem *menu_item, gpointer user_data) {
     if (selected_file.empty()) {
         show_error_dialog("No file selected for opening.");
@@ -189,32 +190,32 @@ void on_open_with_clicked(GtkMenuItem *menu_item, gpointer user_data) {
     GtkWidget *listbox = gtk_list_box_new();
     gtk_box_pack_start(GTK_BOX(content_area), listbox, TRUE, TRUE, 5);
 
-    FILE *fp = popen("ls /usr/share/applications/ | sed 's/\\.desktop$//'", "r");
-    if (!fp) {
-        show_error_dialog("Failed to fetch installed applications.");
-        gtk_widget_destroy(dialog);
-        return;
-    }
+    // List of allowed applications
+    std::vector<std::string> allowed_apps = {"kitty", "wine", "nvim", "steam", "firefox"};
 
-    char app_name[256];
-    while (fgets(app_name, sizeof(app_name), fp)) {
-        app_name[strcspn(app_name, "\n")] = '\0';
-
-        GtkWidget *button = gtk_button_new_with_label(app_name);
+    for (const auto &app_name : allowed_apps) {
+        GtkWidget *button = gtk_button_new_with_label(app_name.c_str());
         gtk_list_box_insert(GTK_LIST_BOX(listbox), button, -1);
 
         g_signal_connect(button, "clicked", G_CALLBACK(open_with_app_clicked), dialog);
     }
-    pclose(fp);
 
     gtk_widget_show_all(dialog);
     gtk_dialog_run(GTK_DIALOG(dialog));
     gtk_widget_destroy(dialog);
 }
 
+// Open file with custom commands
 void open_with_app_clicked(GtkWidget *button, gpointer user_data) {
     const gchar *app_name = gtk_button_get_label(GTK_BUTTON(button));
-    std::string command = std::string(app_name) + " \"" + selected_file + "\"";
+
+    // Command for specific applications
+    std::string command;
+    if (std::string(app_name) == "nvim") {
+        command = "kitty --hold nvim \"" + selected_file + "\"";
+    } else {
+        command = std::string(app_name) + " \"" + selected_file + "\"";
+    }
 
     if (system(command.c_str()) != 0) {
         show_error_dialog("Failed to launch application.");
