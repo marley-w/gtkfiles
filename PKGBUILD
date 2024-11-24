@@ -1,5 +1,5 @@
 # Maintainer: Your Name <marleymrw@proton.me>
-pkgname=hyprfiles-git
+pkgname=hyprfiles
 pkgver=1.1.gd55cf4e
 pkgrel=1
 pkgdesc="A minimalist file manager tailored for Hyprland"
