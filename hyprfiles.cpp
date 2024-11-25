@@ -190,8 +190,8 @@ void on_open_with_clicked(GtkMenuItem *menu_item, gpointer user_data) {
     GtkWidget *listbox = gtk_list_box_new();
     gtk_box_pack_start(GTK_BOX(content_area), listbox, TRUE, TRUE, 5);
 
-    // List of allowed applications
-    std::vector<std::string> allowed_apps = {"kitty", "wine", "nvim", "steam", "firefox"};
+    // List of allowed applications (includes zen-browser)
+    std::vector<std::string> allowed_apps = {"kitty", "wine", "nvim", "steam", "zen-browser"};
 
     for (const auto &app_name : allowed_apps) {
         GtkWidget *button = gtk_button_new_with_label(app_name.c_str());
@@ -270,7 +270,7 @@ int main(int argc, char *argv[]) {
 
     // Window setup
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-    gtk_window_set_title(GTK_WINDOW(window), "HyprFiles");
+    gtk_window_set_title(GTK_WINDOW(window), "hyprfiles");
     gtk_window_set_default_size(GTK_WINDOW(window), 800, 600);
     g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 

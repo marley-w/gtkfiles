@@ -1,28 +1,24 @@
-# Maintainer: Your Name <your.email@example.com>
+# Maintainer: Marley <marleymrw@proton.me>
 pkgname=hyprfiles
-pkgver=1.0.0
+pkgver=1.0
 pkgrel=1
-pkgdesc="A file manager for Hyprland"
+pkgdesc="A lightweight GTK3-based file manager"
 arch=('x86_64')
 url="https://github.com/marley-w/hyprfiles"
 license=('MIT')
-depends=('gtk3' 'git' 'kitty' 'neovim')  # Add any other runtime dependencies here
-makedepends=('git')  # Add build dependencies if needed
-source=("git+https://github.com/marley-w/hyprfiles.git")
-sha256sums=('SKIP')  # We skip the checksum because the source is from Git
+depends=('gtk3' 'glib2' 'gcc' 'filesystem')
+makedepends=('pkg-config')
+source=("${pkgname}.cpp")
+sha256sums=('SKIP')
 
-pkgver() {
-    cd "$srcdir/hyprfiles"  # Enter the hyprfiles directory
-    echo "r$(git rev-list --count HEAD).$(git rev-parse --short HEAD)"  # Use commit count and hash
+build() {
+    cd "$srcdir"
+    g++ ${pkgname}.cpp -o ${pkgname} `pkg-config --cflags --libs gtk+-3.0`
 }
 
 package() {
-    cd "$srcdir/hyprfiles"  # Go into the hyprfiles directory
-
-    # Install the executable (adjust this if your executable is in a different location)
-    install -Dm755 hyprfiles "$pkgdir/usr/bin/hyprfiles"
-
-    # Install other necessary files
-    install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
-    install -Dm644 README.md "$pkgdir/usr/share/doc/$pkgname/README.md"
+    cd "$srcdir"
+    install -Dm755 "${pkgname}" "$pkgdir/usr/bin/${pkgname}"
+    install -Dm644 "${pkgname}.cpp" "$pkgdir/usr/share/doc/${pkgname}/${pkgname}.cpp"
 }
+
