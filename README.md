@@ -4,7 +4,7 @@ This is a filemanager made by me, for me. You can use it and it should work. Jus
 
 The most simple filemanager :)
 
-(I only made this because I can not be fucked to bring in desktop-common depedancies with all the gtk file managers)
+(I only made this because **I can not be fucked to bring in desktop-common depedancies** with all the gtk file managers)
 
 
 
