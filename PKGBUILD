@@ -1,24 +1,27 @@
-# Maintainer: Marley <marleymrw@proton.me>
+# Maintainer: Your Name <your.email@example.com>
 pkgname=hyprfiles
 pkgver=1.0
 pkgrel=1
 pkgdesc="A lightweight GTK3-based file manager"
 arch=('x86_64')
-url="https://github.com/marley-w/hyprfiles"
+url="https://github.com/marley-w/hyprfiles"  # Replace with your repo URL
 license=('MIT')
-depends=('gtk3' 'glib2' 'gcc' 'filesystem')
-makedepends=('pkg-config')
-source=("${pkgname}.cpp")
+depends=('gtk3' 'glib2')
+makedepends=('git' 'pkg-config')
+source=("git+$url.git")
 sha256sums=('SKIP')
 
+pkgver() {
+    cd "$srcdir/$pkgname"
+    git describe --tags --always | sed 's/^v//'
+}
+
 build() {
-    cd "$srcdir"
-    g++ ${pkgname}.cpp -o ${pkgname} `pkg-config --cflags --libs gtk+-3.0`
+    cd "$srcdir/$pkgname"
+    g++ hyprfiles.cpp -o hyprfiles `pkg-config --cflags --libs gtk+-3.0`
 }
 
 package() {
-    cd "$srcdir"
-    install -Dm755 "${pkgname}" "$pkgdir/usr/bin/${pkgname}"
-    install -Dm644 "${pkgname}.cpp" "$pkgdir/usr/share/doc/${pkgname}/${pkgname}.cpp"
+    cd "$srcdir/$pkgname"
+    install -Dm755 hyprfiles "$pkgdir/usr/bin/hyprfiles"
 }
-
