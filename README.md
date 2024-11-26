@@ -11,10 +11,13 @@ The most simple filemanager :)
 ![hyprfiles](https://github.com/user-attachments/assets/33cbe5c8-5a1a-448e-aa07-737eca34c0fa)
 
 
-
-
-some things I am working towards are proper file-roller support, dragging to outside apps, proper permissions support
-
 better looking interface is a given but I have to implement everything first because my coding skills are a 3/10
 
-**renamed due to reddit making me want to commit as per usual**
+
+**Done in a day or 2** drag/drop, dynamic open-with
+
+**Done as soon as I figure it out** file-roller, progress bars, polkit
+
+**FUCK IM NOT AN ARTIST** designing is difficult for me, thats why theres no tree on the left hand side. I'm not sure what I want.
+
+
