@@ -16,3 +16,5 @@ The most simple filemanager :)
 some things I am working towards are proper file-roller support, dragging to outside apps, proper permissions support
 
 better looking interface is a given but I have to implement everything first because my coding skills are a 3/10
+
+**renamed due to reddit making me want to commit as per usual**
