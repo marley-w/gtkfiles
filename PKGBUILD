@@ -1,10 +1,10 @@
 # Maintainer: Marley <marleymrw@proton.me>
-pkgname=hyprfiles
+pkgname=gtkfiles
 pkgver=1.0
 pkgrel=1
-pkgdesc="A lightweight GTK3-based file manager"
+pkgdesc="A DE/WM agnostic GTK3-based file manager"
 arch=('x86_64')
-url="https://github.com/marley-w/hyprfiles"
+url="https://github.com/marley-w/GTKfiles"
 license=('MIT')
 depends=('gtk3' 'glib2' 'gcc' 'filesystem')
 makedepends=('pkg-config')
