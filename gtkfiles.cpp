@@ -190,7 +190,7 @@ void on_open_with_clicked(GtkMenuItem *menu_item, gpointer user_data) {
     GtkWidget *listbox = gtk_list_box_new();
     gtk_box_pack_start(GTK_BOX(content_area), listbox, TRUE, TRUE, 5);
 
-    std::vector<std::string> allowed_apps = {"kitty", "wine", "nvim", "steam", "zen-browser"};
+    std::vector<std::string> allowed_apps = {"kitty", "wine", "nvim", "zen-browser", "file-roller"};
 
     for (const auto &app_name : allowed_apps) {
         GtkWidget *button = gtk_button_new_with_label(app_name.c_str());
@@ -323,4 +323,3 @@ int main(int argc, char *argv[]) {
 
     return 0;
 }
-
