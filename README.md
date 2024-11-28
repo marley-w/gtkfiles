@@ -14,9 +14,9 @@ The most humble filemanager :)
 better looking interface is a given but I have to implement everything first because my coding skills are a 3/10
 
 
-**Done in a day or 2** drag/drop, dynamic open-with
+**Done later than expected** drag/drop, dynamic open-with
 
-**Done as soon as I figure it out** file-roller, progress bars, polkit
+**Done as soon as I figure it out** progress bars, polkit
 
 **FUCK IM NOT AN ARTIST** designing is difficult for me, thats why theres no tree on the left hand side. I'm not sure what I want.
 
