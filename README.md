@@ -1,6 +1,6 @@
 # gtkfiles
 
-This is a filemanager made by me, for me. 
+This is a filemanager made by me, for me.     (renaming can be done by clicking on the name of the file/folder there is no rename button)
 
 The most humble filemanager :)
 
