@@ -2,7 +2,7 @@
 
 This is a filemanager made by me, for me.     (renaming can be done by clicking on the name of the file/folder there is no rename button)
 
-**you can use GTKFILECHOOSER if you click 'other' in the directory chooser)
+**you can use GTKFILECHOOSER if you click 'other' in the directory chooser)**
 The most humble filemanager :)
 
 (I only made this because **I can not be fucked to bring in desktop-common depedancies** with all the gtk file managers)
